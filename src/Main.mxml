@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+									888    888    d8b                                 
+									888    888    Y8P                                 
+									888    888                                        
+	 .d88b.   .d88b.   .d88b.   .d88888    888888 888 88888b.d88b.   .d88b.  .d8888b  
+	d88P"88b d88""88b d88""88b d88" 888    888    888 888 "888 "88b d8P  Y8b 88K      
+	888  888 888  888 888  888 888  888    888    888 888  888  888 88888888 "Y8888b. 
+	Y88b 888 Y88..88P Y88..88P Y88b 888    Y88b.  888 888  888  888 Y8b.          X88 
+	 "Y88888  "Y88P"   "Y88P"   "Y88888     "Y888 888 888  888  888  "Y8888   88888P' 
+		 888                                                                          
+	Y8b d88P                                                                          
+	 "Y88P"                                                                           	
+
+
+	Flexerific Visual Effects
+	Copyright ©2010 Leonard Souza
+	
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	
+	www.leonardsouza.com | hey@leonardsouza.com
+	
+	:: enjoy it up. feel free to reach out. ::
+
+-->
+
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	
+	<fx:Style source="Main.css" />
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	
+</s:Application>
