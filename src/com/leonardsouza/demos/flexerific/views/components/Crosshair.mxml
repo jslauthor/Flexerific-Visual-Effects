@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+
+	<fx:Declarations>
+		<fx:int id="color">0x000000</fx:int>
+	</fx:Declarations>
+	
+	<s:Ellipse left="0" right="0" top="0" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke weight="2" color="{color}" />
+		</s:stroke>		
+	</s:Ellipse>
+	
+	<s:Ellipse width="60%" height="60%" verticalCenter="0" horizontalCenter="0">
+		<s:stroke>
+			<s:SolidColorStroke weight="3" color="{color}" />
+		</s:stroke>
+	</s:Ellipse>
+	
+	<s:Ellipse width="30%" height="30%" verticalCenter="0" horizontalCenter="0">
+		<s:fill>
+			<s:SolidColor color="{color}" />
+		</s:fill>
+	</s:Ellipse>
+
+</s:Group>

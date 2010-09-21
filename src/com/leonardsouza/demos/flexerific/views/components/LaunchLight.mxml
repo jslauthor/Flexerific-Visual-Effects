@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:filters>
+		<s:DropShadowFilter id="innerShadow" inner="true" color="0" distance="2" blurX="2" blurY="2" angle="90" alpha=".5" />
+		<s:DropShadowFilter id="innerHighlight" inner="false" color="0xFFFFFF" distance="1" blurX="1" blurY="2" angle="90" alpha=".4" />
+	</s:filters>
+	
+	<s:Group
+		id="mainMask">
+		<s:Ellipse
+			width="16" height="16">
+			<s:fill>
+				<s:SolidColor alpha="0" />
+			</s:fill>
+		</s:Ellipse>		
+	</s:Group>
+	
+	<s:Group
+		mask="{mainMask}">
+		
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="0x960000" />
+			</s:fill>
+		</s:Rect>
+		
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor id="bgOverlay" color="0xFF0000" alpha="0" />
+			</s:fill>
+		</s:Rect>
+		
+		<s:Ellipse id="light" width="16" height="16" top="6" alpha=".5">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0xff6f6f" ratio="0" />
+					<s:GradientEntry color="0xff0000" ratio=".7" />
+					<s:GradientEntry color="0xb70000" ratio="1" />
+				</s:LinearGradient>
+			</s:fill>
+		</s:Ellipse>
+		
+	</s:Group>
+	
+</s:Group>

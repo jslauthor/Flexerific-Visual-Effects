@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 currentState="off" 
+		 xmlns:ease="com.leonardsouza.easing.spark.*" 
+		 xmlns:filters="com.leonardsouza.filters.*" 
+		 xmlns:effects="com.leonardsouza.effects.*" 
+		 xmlns:components="com.leonardsouza.demos.flexerific.views.components.*" 
+		 xmlns:sound="com.leonardsouza.sound.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.leonardsouza.demos.flexerific.events.LoginFailedEvent;
+			import com.leonardsouza.easing.spark.base.EaseInOutBase;
+			import com.leonardsouza.interpolators.StringNumberInterpolator;
+			import com.leonardsouza.util.math.MathUtil;
+			
+			import mx.utils.ColorUtil;
+			
+			import spark.components.supportClasses.Range;
+			import spark.effects.interpolation.NumberInterpolator;
+			import spark.filters.BlurFilter;
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<ease:Back id="backEase" easeType="{EaseInOutBase.EASE_OUT}" />
+		<s:Fade id="distressAlpha" target="{distress}" />
+		<s:Sequence id="verifySecurity">
+			<s:Animate target="{securityPercentLabels}">
+				<s:MotionPath property="minWidth">
+					<s:Keyframe time="0" value="{securityPercentLabels.minWidth}" />
+					<s:Keyframe time="400" value="75" />
+				</s:MotionPath>
+			</s:Animate>
+			<s:Parallel>
+				<s:SetAction target="{securityInfo}" property="text" value="RETINAL" />
+				<s:SetAction target="{securityInfo}" property="text" value="FINGERPRINT" startDelay="300" />
+				<s:SetAction target="{securityInfo}" property="text" value="BACKGROUND" startDelay="600" />
+				<s:SetAction target="{securityInfo}" property="text" value="DNA" startDelay="900" />
+				<s:SetAction target="{securityInfo}" property="text" value="USER/PASS" startDelay="1600" />
+				<s:Animate target="{securityPercent}">
+					<s:MotionPath property="text" interpolator="{new StringNumberInterpolator()}">
+						<s:Keyframe time="0" value="0" />
+						<s:Keyframe time="2000" value="100" />
+					</s:MotionPath>
+				</s:Animate>
+			</s:Parallel>
+		</s:Sequence>
+		<s:Range id="distressRange" minimum="{-99}" maximum="{-101}" />
+		<sound:AudioChannel
+			id="loginFailureSound" 
+			source="@Embed('/assets/audio/beep_8.mp3')"
+			volume=".15"/>
+		<sound:AudioChannel
+			id="accessLockedSound" 
+			source="@Embed('/assets/audio/access_locked.mp3')"
+			volume=".15"/>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="off" />
+		<s:State name="on" />
+		<s:State name="distress" stateGroups="threat" />
+		<s:State name="failure" stateGroups="threat" />
+	</s:states>
+	
+	<s:transitions>
+		<s:Transition fromState="off" toState="on">
+			<s:Sequence>
+				<s:AddAction targets="{[loginAndPasswordInputs, submitButton, securityLabels, securityPercentLabels, motionBackground]}" />
+				<s:SetAction target="{motionBackground}" property="alpha" value="0" />
+ 				<s:Parallel duration="600">
+					<s:Move3D target="{securityLabels}" xFrom="{securityLabels.x-100}" xTo="{securityLabels.x}" easer="{backEase}" />
+					<s:Move3D target="{securityPercentLabels}" xFrom="{securityPercentLabels.x-100}" xTo="{securityPercentLabels.x}" easer="{backEase}" />
+					<s:Move3D target="{loginAndPasswordInputs}" xFrom="{loginAndPasswordInputs.x+100}" xTo="{loginAndPasswordInputs.x}" easer="{backEase}" />
+					<s:Move3D target="{submitButton}" yFrom="{submitButton.y+100}" yTo="{submitButton.y}" easer="{backEase}" />
+					<s:Fade target="{motionBackground}" alphaFrom="0" alphaTo="1" />
+				</s:Parallel>
+				<s:SetAction target="{motionBackground}" property="playing" value="true" />
+			</s:Sequence>
+		</s:Transition>
+		<s:Transition fromState="on" toState="distress">
+			<s:Sequence id="distressSequence">
+				<s:Parallel>
+					<s:CallAction target="{loginFailureSound}" functionName="play" startDelay="300" />
+					<s:Animate target="{dialogue}">
+						<s:MotionPath property="horizontalCenter">
+							<s:Keyframe time="200" value="-15" />
+							<s:Keyframe time="400" value="15" />
+							<s:Keyframe time="600" value="-5" />
+							<s:Keyframe time="800" value="5" />
+							<s:Keyframe time="1000" value="0" />
+						</s:MotionPath>
+					</s:Animate>					
+				</s:Parallel>
+				<s:SetAction target="{distress}" property="alpha" value="0" />
+				<s:SetAction target="{distressGradient}" property="alpha" value="0" />	
+				<s:AddAction id="distressAddAction" target="{distress}"/>	
+			</s:Sequence>
+		</s:Transition>
+		<s:Transition fromState="distress" toState="failure">
+			<s:Sequence>
+				<s:SetAction target="{lockSymbol}" property="alpha" value="0" />
+				<s:AddAction target="{lockSymbol}"/>
+				<s:Parallel>
+					<s:CallAction target="{accessLockedSound}" functionName="play" startDelay="300" />
+					<s:Animate target="{dialogue}">
+						<s:MotionPath property="horizontalCenter">
+							<s:Keyframe time="200" value="-15" />
+							<s:Keyframe time="400" value="15" />
+							<s:Keyframe time="600" value="-5" />
+							<s:Keyframe time="800" value="5" />
+							<s:Keyframe time="1000" value="0" />
+						</s:MotionPath>
+					</s:Animate>					
+				</s:Parallel>
+				<s:Parallel id="failureFade">
+					<s:SetAction target="{motionBackground}" property="playing" value="false" />
+					<s:Fade target="{lockSymbol}" alphaFrom="0" alphaTo=".8" duration="750" />
+				</s:Parallel>
+			</s:Sequence>
+		</s:Transition>
+		<s:Transition fromState="distress" toState="*">
+			<s:Sequence id="fromDistress">
+				<s:Parallel>
+					<s:Fade target="{distress}" alphaTo="0" duration="1000" />
+					<s:SetAction target="{motionBackground}" property="playing" value="false" />
+				</s:Parallel>
+			</s:Sequence>
+		</s:Transition>
+		<s:Transition fromState="on" toState="off">
+			<s:SetAction target="{motionBackground}" property="playing" value="false" />
+		</s:Transition>		
+	</s:transitions>
+	
+	<components:MotionBackground
+		id="motionBackground"
+		verticalCenter="0"
+		width="100%"
+		filters="{[new BlurFilter(10, 10)]}"/>
+	
+	<s:VGroup
+		id="dialogue"
+		verticalCenter="0"
+		horizontalCenter="0"
+		gap="5">
+		
+		<s:HGroup verticalAlign="middle">
+			
+			<s:HGroup verticalAlign="middle" gap="5" maxWidth="145">
+				<s:Group id="securityLabels">
+					<s:VGroup top="5" gap="-2">
+						<s:Label
+							styleName="securityLabel"
+							text="SECURITY" />
+						<s:Label
+							id="securityInfo"
+							styleName="securityInfo"
+							text="AWAITING INPUT" />
+					</s:VGroup>				
+				</s:Group>
+				
+				<s:Group minWidth="25" id="securityPercentLabels">
+					<s:HGroup gap="2" top="10" left="0" verticalAlign="top">
+						<s:Label
+							id="securityPercent"
+							textInput="{trace('hi')}"
+							styleName="securityPercent"
+							text="0" />
+						<s:Group>
+							<s:Label
+								top="5"
+								styleName="securityPercentSign"
+								text="%" />					
+						</s:Group>
+					</s:HGroup>				
+				</s:Group>				
+			</s:HGroup>
+			
+			<s:VGroup gap="5" width="180" id="loginAndPasswordInputs">
+				<s:Group id="login">
+					<s:TextInput
+						id="loginInput"
+						width="180"
+						height="21"
+						focusIn="{securityLoginLabel.visible = false}"
+						focusOut="{if (loginInput.text == '') securityLoginLabel.visible = true}"/>
+					<s:Label
+						id="securityLoginLabel"
+						styleName="securityInputLabel"
+						alpha=".23"
+						text="LOGIN" 
+						right="5"
+						verticalCenter="2"
+						focusEnabled="false"
+						mouseEnabled="false"/>
+				</s:Group>
+				<s:Group id="password">
+					<s:TextInput
+						id="passwordInput"
+						displayAsPassword="true"
+						width="180"
+						height="21"
+						focusIn="{passwordLoginLabel.visible = false}"
+						focusOut="{if (passwordInput.text == '') passwordLoginLabel.visible = true}"/>
+					<s:Label
+						id="passwordLoginLabel"
+						styleName="securityInputLabel"
+						alpha=".23"
+						text="PASSWORD" 
+						right="5"
+						verticalCenter="2"
+						focusEnabled="false"
+						mouseEnabled="false"/>
+				</s:Group>
+			</s:VGroup>
+			
+		</s:HGroup>
+		
+		<s:Button
+			id="submitButton" 
+			width="100%"
+			height="32"
+			label="SUBMIT"
+			useHandCursor="true"
+			buttonMode="true" />
+		
+	</s:VGroup>
+
+	<s:Rect
+		id="distress"
+		includeIn="threat"
+		includeInLayout="false"
+		x="-100" y="-100"
+		width="{width+200}" height="{height+200}">
+		<s:fill>
+			<s:RadialGradient>
+				<s:GradientEntry id="distressGradient" color="0xFF0000" alpha="0" ratio=".65" />
+				<s:GradientEntry color="0xFF0000" ratio="1" />
+			</s:RadialGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Group
+		id="lockSymbol"
+		includeIn="failure"
+		width="100%" height="100%"
+		verticalCenter="0" horizontalCenter="0">
+		
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="{ColorUtil.adjustBrightness(0xFF0000, -90)}" alpha=".8" />
+			</s:fill>
+		</s:Rect>
+		
+		<s:Rect radiusX="20" radiusY="20" 
+				width="350" height="300"
+				verticalCenter="0" horizontalCenter="0">
+			<s:fill>
+				<s:SolidColor color="{ColorUtil.adjustBrightness(0xFF0000, -60)}" alpha="1" />
+			</s:fill>
+		</s:Rect>
+		<components:Lock color="{ColorUtil.adjustBrightness(0xFF0000, -10)}" verticalCenter="0" horizontalCenter="0" />
+		
+	</s:Group>
+	
+</s:Group>

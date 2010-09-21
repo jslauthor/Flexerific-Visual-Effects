@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:components="com.leonardsouza.demos.flexerific.views.components.*"
+		 xmlns:filters="com.leonardsouza.filters.*" 
+		 xmlns:ease="com.leonardsouza.easing.spark.*" 
+		 xmlns:animations="com.leonardsouza.demos.flexerific.views.animations.*"
+		 creationPolicy="all" xmlns:sound="com.leonardsouza.sound.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.leonardsouza.demos.flexerific.events.AddHeatEvent;
+			import com.leonardsouza.easing.spark.base.EaseInOutBase;
+			
+			import mx.utils.ColorUtil;
+			
+			import spark.filters.BlurFilter;
+			import spark.filters.DropShadowFilter;
+			
+		]]>
+	</fx:Script>
+
+	<fx:Metadata>
+		[Event(name="addHeat", type="com.leonardsouza.demos.flexerific.events.AddHeatEvent")]
+	</fx:Metadata>
+	
+	<fx:Declarations>
+		<ease:Back id="backEase" easeType="{EaseInOutBase.EASE_OUT}" />
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="freedom" />
+		<s:State name="enslavement" />
+	</s:states>
+	
+	<s:transitions>
+		<s:Transition fromState="freedom" toState="enslavement">
+			<s:Sequence id="enslavemenSequence">
+
+				<s:SetAction target="{dominationLabel}" property="text" value="DOMINATING WORLD" />
+				<s:SetAction target="{dominationProgress}" property="alpha" value="1" />
+				<s:CallAction target="{heatmap.heatmapEllipses}" functionName="removeAllElements" />
+				<s:Fade target="{dominationProgress}" duration="500" />
+				
+				<s:Parallel>
+					
+					<s:AnimateColor 
+						targets="{[mapGrad1, mapGrad2, mapGrad3]}" 
+						duration="19000" 
+						startDelay="2000" />  
+					
+					<s:Fade target="{backgroundColorize}" duration="10000" startDelay="5000" />
+					<s:Fade target="{dominationProgress}" alphaFrom="1" alphaTo=".5" duration="3000" startDelay="5000" />
+					
+					<s:Sequence>
+						
+						<!-- North America -->
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="45" yTo="45"
+							moveDuration="500"
+							addHeat="{dispatchEvent(event)}"/>							
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[1, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="60" yTo="60"
+							scaleXTo="6" scaleYTo="6"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="80" yTo="150"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[4, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="100" yTo="150"
+							scaleXTo="5" scaleYTo="8"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="100" yTo="130"
+							scaleXTo="7" scaleYTo="6"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[6, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="180" yTo="100"
+							scaleXTo="5" scaleYTo="5"
+							dropXOffset="12" dropYOffset="12"
+							moveDuration="200"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="185" yTo="120"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="170" yTo="150"
+							scaleXTo="5" scaleYTo="5"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[8, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="160" yTo="180"
+							scaleXTo="6" scaleYTo="6"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="150" yTo="160"
+							scaleXTo="3" scaleYTo="3"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[11, 100]}"  />
+						
+						<!-- Mexico -->
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="120" yTo="220"
+							scaleXTo="8"
+							scaleYTo="13"
+							moveDuration="300"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<!-- South America -->
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[15, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="230" yTo="275"
+							moveDuration="300"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="210" yTo="310"
+							scaleXTo="5" scaleYTo="5"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[17, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="225" yTo="340"
+							scaleXTo="3" scaleYTo="3"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="220" yTo="360"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="270" yTo="385"
+							scaleXTo="13" scaleYTo="13"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[24, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="270" yTo="350"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<!-- Europe -->
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="430" yTo="100"
+							moveDuration="300"
+							addHeat="{dispatchEvent(event)}"/>
+
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[27, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="450" yTo="120"
+							scaleXTo="6" scaleYTo="6"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="480" yTo="100"
+							scaleXTo="11" scaleYTo="11"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[33, 100]}"  />
+						
+						<!-- Russia -->
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="530" yTo="80"
+							moveDuration="100"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[41, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="580" yTo="100"
+							scaleXTo="12" scaleYTo="12"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="620" yTo="150"
+							scaleXTo="13" scaleYTo="13"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[45, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="720" yTo="95"
+							scaleXTo="17" scaleYTo="17"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<!-- India -->
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="660" yTo="204"
+							moveDuration="100"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="674" yTo="224"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[55, 100]}"  />
+						
+						<!-- Saudi Arabia -->
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="600" yTo="200"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[58, 100]}"  />
+						
+						<!-- Africa -->
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="430" yTo="200"
+							scaleXTo="13" scaleYTo="13"
+							moveDuration="300"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="450" yTo="210"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[65, 100]}"  />
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="470" yTo="250"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="530" yTo="355"
+							moveDuration="50"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[78, 100]}"  />
+						
+						<!-- China -->
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="744" yTo="200"
+							moveDuration="300"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[88, 100]}"  />
+						
+						<!-- Australia -->		
+						
+						<animations:DropPayload
+							target="{targetLocator}"
+							xTo="800" yTo="340"
+							moveDuration="300"
+							addHeat="{dispatchEvent(event)}"/>
+						
+						<s:Move3D target="{targetLocator}" xTo="1100" yTo="600" easer="{backEase}" duration="500" />
+						
+					</s:Sequence>
+
+				</s:Parallel>
+				
+				<s:Fade target="{dominationProgress}" alphaFrom=".5" alphaTo="1" duration="1000" />
+				<s:CallAction target="{dominationProgressBar}" functionName="setProgress" args="{[100, 100]}"  />
+				<s:SetAction target="{dominationLabel}" property="text" value="DOMINATION COMPLETE" />
+				
+			</s:Sequence>
+		</s:Transition>
+	</s:transitions>
+	
+	<s:Rect
+		id="backgroundColorize"
+		width="100%" height="100%"
+		alpha="0"
+		alpha.enslavement="1"
+		blendMode="darken">
+		<s:fill>
+			<s:SolidColor color="{ColorUtil.adjustBrightness2(0xFF0000, -60)}" />
+		</s:fill>		
+	</s:Rect>
+	
+	<s:Group
+		id="worldMask"
+		width="100%" height="96%"
+		top="3">
+		<components:WorldMap
+			width="100%" height="100%">
+			<components:fill>
+				<s:SolidColor alpha="0" />
+			</components:fill>
+		</components:WorldMap>
+	</s:Group>
+	
+	<s:Group
+		id="worldMap"
+		filters="{[new DropShadowFilter(2, 90, 0, .4, 1, 1)]}"
+		mask="{worldMask}"
+		width="100%" height="96%"
+		top="3">
+		
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:RadialGradient>
+					<s:GradientEntry 
+						id="mapGrad1" 
+						color="0x00dedb" 
+						color.enslavement="{ColorUtil.adjustBrightness(0xFF0000, -20)}" 
+						ratio="0" />
+					<s:GradientEntry 
+						id="mapGrad2" 
+						color="0x00cccb"
+						color.enslavement="{ColorUtil.adjustBrightness(0xFF0000, -30)}" 
+						ratio=".2" />
+					<s:GradientEntry 
+						id="mapGrad3" 
+						color="0x00505a"
+						color.enslavement="{ColorUtil.adjustBrightness(0xFF0000, -80)}" 
+						ratio="1" />
+				</s:RadialGradient>
+			</s:fill>
+		</s:Rect>
+		
+	</s:Group>
+
+	<components:Heatmap		
+		id="heatmap"
+		includeInLayout="false"
+		width="{width}"
+		height="{height}"/>
+	
+	<components:WorldMapGrid
+		width="100%" height="100%"
+		alpha=".15">
+		<components:fill>
+			<s:RadialGradient>
+				<s:GradientEntry color="0x00505a" ratio="0" alpha=".2" />
+				<s:GradientEntry color="0x00505a" ratio="1" />
+			</s:RadialGradient>
+		</components:fill>
+	</components:WorldMapGrid>
+	
+	<s:VGroup
+		id="dominationProgress"
+		alpha="0"
+		alpha.enslavement="1"
+		verticalCenter="0"
+		horizontalCenter="0"
+		includeIn="enslavement"
+		verticalAlign="middle">
+		
+		<s:Label
+			text="DOMINATING WORLD"
+			alpha="1"
+			alpha.enslavement="1"
+			id="dominationLabel"
+			styleName="worldDominationLabel"/>
+		
+		<mx:ProgressBar
+			id="dominationProgressBar"
+			alpha="1"
+			alpha.enslavement="1"
+			width="100%"			
+			label=""
+			mode="manual"
+			trackSkin="com.leonardsouza.demos.flexerific.views.skins.DominationProgressBarTrackSkin"
+			barSkin="com.leonardsouza.demos.flexerific.views.skins.DominationProgressBarSkin" />
+		
+	</s:VGroup>	
+
+	<components:Radar
+		id="radar"
+		includeInLayout="true"
+		width="{width}"
+		height="{height}"
+		curveX="{width/2}" />
+	
+	<!-- 
+	
+	Target locator
+	
+	-->
+	
+	<s:Group
+		id="targetLocatorContainer"
+		width="100%" height="96%"
+		top="3">
+		
+		<s:Rect width="100%"
+				height="100%">
+			<s:fill>
+				<s:SolidColor alpha="0" />
+			</s:fill>
+		</s:Rect>
+		
+		<components:Crosshair
+			id="targetLocator"
+			x="-20"
+			y="-20"
+			width="25"
+			height="25"
+			alpha=".8"
+			color="0xFFFFFFF"/>
+		
+	</s:Group>
+
+</s:SkinnableContainer>

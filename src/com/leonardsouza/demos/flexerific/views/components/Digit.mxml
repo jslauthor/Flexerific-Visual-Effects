@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				width="49" height="53">
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Label;
+			import mx.core.IVisualElement;
+			import mx.core.UIComponent;
+			import mx.core.mx_internal;
+			import mx.events.FlexEvent;
+			
+			import spark.core.MaskType;
+			import spark.effects.easing.Linear;
+			
+			private var _label:String;
+			
+			[Bindable]
+			public function get label():String
+			{
+				return _label;
+			}
+
+			public function set label(value:String):void
+			{
+				addEventListener(FlexEvent.UPDATE_COMPLETE, createNumber);
+				_label = value;
+				digitLabel.text = value;
+			}
+			
+			protected function createNumber(event:FlexEvent):void
+			{
+				removeEventListener(FlexEvent.UPDATE_COMPLETE, createNumber);
+				if (digitLabel.width < 1 || digitLabel.height < 1) return;
+				
+				// So it turns out you cannot reliably create a mask from a Label, 
+				// so instead we draw the Label to a bitmap and create the mask from there
+				
+				var bmd:BitmapData = new BitmapData(digitLabel.width, digitLabel.height, true, 0x00FFFFFF);
+				bmd.draw(digitLabel, digitLabel.transform.matrix);
+				var bitmap:Bitmap = new Bitmap(bmd);
+				
+				var digit:Rect = new Rect();
+				digit.maskType = 'alpha'
+				digit.horizontalCenter = 0;
+				digit.verticalCenter = 4;
+				digit.width = digitLabel.width;
+				digit.height = digitLabel.height;
+				var grad:LinearGradient = new LinearGradient();
+				grad.rotation = 90;
+				grad.entries = 
+					[
+						new GradientEntry(0xd5f2ff, 0),
+						new GradientEntry(0x9de0ff, .25),
+						new GradientEntry(0x4facd7, .40),
+						new GradientEntry(0xFFFFFF, .41),
+						new GradientEntry(0x9de0ff, .42),
+						new GradientEntry(0x5ebeeb, 1)
+					];
+				digit.fill = grad;
+				digit.mask = bitmap;
+				
+				addElement(digit);
+				callLater(removePrevious); // hacky yes, but it gets rid of a flicker when changing numbers
+			}
+
+			protected function removePrevious():void
+			{
+				if (getElementAt(numElements-2) is Rect) removeElement(getElementAt(numElements-2));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Rect
+		radiusX="8"
+		radiusY="8"
+		left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0x0097d6" ratio="0" />
+				<s:GradientEntry color="0x0776a5" ratio=".49" />
+				<s:GradientEntry color="0x5bbadf" ratio=".49" />
+				<s:GradientEntry color="0x70cae7" ratio=".51" />
+				<s:GradientEntry color="0x098ac5" ratio=".51" />
+				<s:GradientEntry color="0x045878" ratio="1" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+	<s:Label id="digitLabel" alpha="0" />			
+	
+</s:Group>

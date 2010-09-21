@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:ease="com.leonardsouza.easing.spark.*"
+		 xmlns:components="com.leonardsouza.demos.flexerific.views.components.*"
+		 currentState="domination" xmlns:sound="com.leonardsouza.sound.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.leonardsouza.easing.spark.base.EaseInOutBase;
+			
+			import spark.effects.easing.Linear;
+			import spark.filters.GlowFilter;
+			
+			[Bindable]
+			public var START_LAUNCH:String = 'startLaunch';
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Metadata>
+		[Event(name="startLaunch", type="flash.events.Event")]
+	</fx:Metadata>
+	
+	<fx:Declarations>
+		<s:Linear id="linearEase" />
+ 		<s:BevelFilter
+			id="bevel"
+			angle="90" blurX="2" blurY="2" distance="1" highlightColor="0xFFFFFF" highlightAlpha=".7" shadowAlpha="0" />
+		<ease:Sine id="sineEase" easeType="{EaseInOutBase.EASE_OUT}" />
+		<sound:AudioChannel
+			id="alarmSound" 
+			source="@Embed('/assets/audio/warning_alarm.mp3')"
+			volume=".25"/>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="login" />
+		<s:State name="domination" stateGroups="dominate" />
+		<s:State name="launch" stateGroups="dominate" />
+	</s:states>
+	
+	<s:transitions>
+		<s:Transition fromState="*" toState="login">
+			<s:Parallel>
+				<s:AddAction target="{bottomBar}" />
+				<s:Move3D target="{bottomBar}" yFrom="{bottomBar.y+100}" yTo="{bottomBar.y}" easer="{sineEase}" /> 				
+			</s:Parallel>
+		</s:Transition>
+		<s:Transition fromState="login" toState="domination">
+			<s:Parallel>
+				<s:Animate targets="{[dominationLabelBG, dominationLabel, dominationBG, launchButton]}" duration="500" easer="{sineEase}">
+					<s:MotionPath property="bottom">
+						<s:Keyframe time="0" />
+						<s:Keyframe time="500" />
+					</s:MotionPath>
+				</s:Animate>
+				<s:Animate target="{topBar}" easer="{sineEase}">
+					<s:MotionPath property="top">
+						<s:Keyframe time="0" />
+						<s:Keyframe time="500" />
+					</s:MotionPath>
+				</s:Animate>
+			</s:Parallel>
+		</s:Transition>
+		<s:Transition fromState="domination" toState="launch">
+			<s:Sequence>			
+				<s:Parallel>
+					<s:CallAction target="{alarmSound}" functionName="play" />
+					<s:CallAction target="{alarmSound}" functionName="play" startDelay="2000"/>
+					<s:CallAction target="{alarmSound}" functionName="play" startDelay="4000"/>
+					<s:Animate targets="{[leftLight.light, rightLight.light, rightLight.bgOverlay, leftLight.bgOverlay]}" easer="{linearEase}">
+						<s:MotionPath property="alpha">
+							<s:Keyframe time="0" value=".5" />
+							<s:Keyframe time="1000" value="1" />
+							<s:Keyframe time="2000" value=".5" />
+							<s:Keyframe time="3000" value="1" />
+						</s:MotionPath>
+					</s:Animate>
+					<s:AnimateFilter targets="{[leftLight, rightLight]}" easer="{linearEase}">
+						<s:bitmapFilter>
+							<s:GlowFilter
+								blurX="10"
+								blurY="10"
+								color="0xff834c"
+								alpha="0" />								
+						</s:bitmapFilter>
+						<s:MotionPath property="alpha">
+							<s:Keyframe time="0" value="0" />
+							<s:Keyframe time="1000" value="1" />
+							<s:Keyframe time="2000" value="0" />
+							<s:Keyframe time="3000" value="1" />
+						</s:MotionPath>					
+					</s:AnimateFilter> 
+					<s:SetAction target="{launchButton}" property="enabled" value="false" startDelay="200" />
+					<s:CallAction target="{this}" functionName="dispatchEvent" args="{[new Event(START_LAUNCH)]}" startDelay="2000" />
+				</s:Parallel>
+			</s:Sequence>
+		</s:Transition>
+	</s:transitions>
+	
+	<s:Group
+		id="bottomBar"
+		width="100%" height="100%">
+		<s:Path
+			data="M903.218 7.4707 903.431 15.5488 0.298828 15.8125 0 9.11816C0 9.11816 105.21 0 443.21 0 790.21 0 903.218 7.4707 903.218 7.4707Z"		width="100%"
+			bottom="-2"
+			filters="{[bevel]}">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0x005e84" ratio="0" />
+					<s:GradientEntry color="0x005e84" ratio=".25" />
+					<s:GradientEntry color="0x002d3f" ratio="1" />
+				</s:LinearGradient>
+			</s:fill>
+		</s:Path>
+		
+		<s:Path
+			id="dominationBG"
+			data="M903.069 0 903.282 63.0781 0 63.3418 0 1.64746C0 1.64746 105.061 47.5293 443.061 47.5293 790.061 47.5293 903.069 0 903.069 0Z"		width="100%"
+			bottom.login="{-dominationBG.height}"
+			bottom.dominate="0"
+			filters="{[bevel]}">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0x005e84" ratio="0" />
+					<s:GradientEntry color="0x005e84" ratio=".25" />
+					<s:GradientEntry color="0x002d3f" ratio="1" />
+				</s:LinearGradient>
+			</s:fill>
+		</s:Path>
+		
+		<s:Path
+			id="dominationLabelBG"
+			data="M320.232 67.1826C320.232 39.7158 292.181 16.4688 292.181 16.4688 282.272 16.4688 279.573 0 266.663 0L48.3583 0C35.4496 0 32.7504 17.3418 22.8412 17.3418 22.8412 17.3418 -1.02255 40.8848 0.0340881 66.7666 0.203522 70.915 320.232 64.1006 320.232 67.1826Z"
+			horizontalCenter="0"
+			bottom.login="-49"
+			bottom.dominate="-5"
+			filters="{[bevel]}">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0x0072a1" ratio="0" />
+					<s:GradientEntry color="0x005c82" ratio=".23" />
+					<s:GradientEntry color="0x005c82" ratio=".25" />
+					<s:GradientEntry color="0x3b9bc3" ratio=".26" />
+					<s:GradientEntry color="0x0072a6" ratio=".28" />
+					<s:GradientEntry color="0x00405b" ratio=".76" />
+					<s:GradientEntry color="0x004460" ratio="1" />
+				</s:LinearGradient>
+			</s:fill>
+		</s:Path>
+		
+		<s:Label 
+			id="dominationLabel"
+			text="WORLD DOMINATION MAINFRAME"
+			styleName="dominationLabel"
+			horizontalCenter="0"
+			bottom.login="3"
+			bottom.dominate="48"/>		
+		
+		<s:Button
+			id="launchButton"
+			label="LAUNCH"
+			enabled="true"
+			width="200"
+			height="31" 
+			bottom.login="-30"
+			bottom.dominate="10"
+			enabled.launch="false"
+			buttonMode="true"
+			useHandCursor="true"
+			horizontalCenter="0" />
+		
+		<s:Group
+			width="255"			
+			bottom.login="-30"
+			bottom.dominate="12"
+			horizontalCenter="0">
+			
+			<components:LaunchLight id="leftLight" left="0" />
+			<components:LaunchLight id="rightLight" right="0" />
+			
+		</s:Group>
+			
+		
+	</s:Group>
+
+	
+	<s:Path
+		id="topBar"
+		data="M0 1.64746 0.298828 30.3418C0.298828 30.3418 225.407 8.47852 450.852 7.91406 676.972 7.34717 903.431 28.0781 903.431 28.0781L903.218 0 0 1.64746Z"		
+		width="100%"
+		top="-30"
+		top.dominate="-3">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0x005e84" ratio="0" />
+				<s:GradientEntry color="0x005e84" ratio=".25" />
+				<s:GradientEntry color="0x002d3f" ratio="1" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Path>
+	
+</s:Group>

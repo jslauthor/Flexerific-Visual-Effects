@@ -13,6 +13,8 @@ package com.leonardsouza.effects.effectClasses
 	import flash.utils.getTimer;
 	
 	import mx.core.Application;
+	import mx.core.FlexGlobals;
+	import mx.core.IVisualElementContainer;
 	import mx.core.UIComponent;
 	import mx.effects.EffectInstance;
 	
@@ -76,7 +78,7 @@ package com.leonardsouza.effects.effectClasses
             _startTime = getTimer();
             initVars();
             drawChildren(); 
-            if (target != Application.application) target.visible = false;
+            if (target != FlexGlobals.topLevelApplication) target.visible = false;
             super.startEffect();
         }
 
@@ -194,7 +196,10 @@ package com.leonardsouza.effects.effectClasses
 		private function drawChildren():void
 		{
 			createChildren();
-			target.parent.addChildAt(_bmpContainer, target.parent.getChildIndex(target)+1);
+			if (!target.parent is IVisualElementContainer)
+				target.parent.addChildAt(_bmpContainer, target.parent.getChildIndex(target)+1);
+			else
+				IVisualElementContainer(target.parent).addElementAt(_bmpContainer, target.parent.getChildIndex(target)+1);
 		}
 
 		/**
@@ -205,7 +210,12 @@ package com.leonardsouza.effects.effectClasses
 			try
 			{
 				if (target.parent.contains(_bmpContainer) != null)
-					target.parent.removeChild(_bmpContainer);
+				{
+					if (!target.parent is IVisualElementContainer)
+						target.parent.removeChild(_bmpContainer);
+					else
+						IVisualElementContainer(target.parent).removeElement(_bmpContainer);
+				}
 			}
 			catch (e:Error) {throw new Error(e.message);}
 			

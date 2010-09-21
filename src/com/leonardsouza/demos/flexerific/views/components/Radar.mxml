@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:components="com.leonardsouza.demos.flexerific.views.components.*"
+		 creationComplete="prepareCurve()">
+	
+	<fx:Script>
+		
+		<![CDATA[
+			import com.leonardsouza.geom.VocalPoint;
+			import com.leonardsouza.util.math.MathUtil;
+			
+			import mx.events.FlexEvent;
+			
+			protected var pts:Vector.<VocalPoint>;
+
+			private var _curveX:Number = 0;
+			private var _max:Number = 60;
+			
+			public function get curveX():Number
+			{
+				return _curveX;
+			}
+
+			public function set curveX(value:Number):void
+			{
+				_curveX = value;
+
+				curve.x = curveX;
+				bendCurve();
+			}
+			
+			public function prepareCurve():void
+			{
+				pts = new Vector.<VocalPoint>;
+				pts.push(new VocalPoint(0, 0));
+				pts.push(new VocalPoint(0, height/2));
+				pts.push(new VocalPoint(0, height));
+				curve.points = pts;
+			}
+			
+			protected function bendCurve():void
+			{
+				var fraction:Number = 1 - (curveX / (width/2));
+				VocalPoint(pts[1]).x = _max * fraction * -1;
+				curve.alpha = (1 - Math.abs(fraction));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:LinearGradientStroke
+			id="curveStroke"  
+			weight="35" 
+			caps="square"
+			rotation="180">
+			<s:GradientEntry color="0x86eacd" ratio="0" />
+			<s:GradientEntry color="0x86eacd" ratio="1" alpha="0" />
+		</s:LinearGradientStroke>
+	</fx:Declarations>
+	
+	<components:AnimatableCurve
+		top="0"
+		bottom="0"
+		id="curve" 
+		stroke="{curveStroke}" />
+	
+</s:Group>

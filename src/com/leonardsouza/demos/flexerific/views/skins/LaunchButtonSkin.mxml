@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
+             xmlns:fb="http://ns.adobe.com/flashbuilder/2009" 
+			 minWidth="21" minHeight="21" 
+			 alpha.disabled="0.65"
+			 alpha="1">
+    
+    <!-- host component -->
+    <fx:Metadata>
+        <![CDATA[ 
+        /** 
+         * @copy spark.skins.spark.ApplicationSkin#hostComponent
+         */
+        [HostComponent("spark.components.Button")]
+        ]]>
+    </fx:Metadata>
+    
+	<fx:Script>
+		<![CDATA[
+			import mx.utils.ColorUtil;
+		]]>
+	</fx:Script>
+	<s:filters>
+		<s:DropShadowFilter id="innerShadow" inner="true" color="0" distance="2" blurX="2" blurY="2" angle="90" alpha=".5" />
+		<s:DropShadowFilter id="innerHighlight" inner="false" color="0xFFFFFF" distance="1" blurX="1" blurY="2" angle="90" alpha=".4" />
+	</s:filters>
+	
+    <s:states>
+        <s:State name="up" />
+        <s:State name="over" />
+        <s:State name="down" />
+        <s:State name="disabled" />
+    </s:states>
+    
+	<s:transitions>
+		<s:Transition fromState="up" toState="over">
+			<s:AnimateColor target="{overGradient}" />
+		</s:Transition>
+		<s:Transition fromState="over" toState="up">
+			<s:AnimateColor target="{overGradient}" />
+		</s:Transition>
+		<s:Transition fromState="*" toState="disabled">
+			<s:Fade target="{this}" duration="1000" />
+		</s:Transition>
+	</s:transitions>
+	
+	<s:Rect
+		id="background"
+		left="0" right="0" top="0" bottom="0"
+		alpha="1">
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0xc30000" ratio="0" />
+				<s:GradientEntry id="overGradient" color="0x960000" color.over="{ColorUtil.adjustBrightness(0xFF0000, -20)}" ratio=".7" />
+				<s:GradientEntry color="0xae0000" ratio="1" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+	
+    <s:Label id="labelDisplay"
+             textAlign="center"
+             verticalAlign="middle"
+             maxDisplayedLines="1"
+             verticalCenter="2"
+			 horizontalCenter="0"
+			 blendMode="hardlight"
+			 alpha=".8"/>
+	
+	<s:Rect width="100%" height="46%" top="0" alpha=".3" blendMode="colordodge">
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF" />
+		</s:fill>
+	</s:Rect>
+    
+	<s:Rect width="100%" height="46%" top="0" alpha=".3">
+		<s:fill>
+			<s:SolidColor color="0xFFFFFF" />
+		</s:fill>
+	</s:Rect>
+	
+</s:SparkSkin>

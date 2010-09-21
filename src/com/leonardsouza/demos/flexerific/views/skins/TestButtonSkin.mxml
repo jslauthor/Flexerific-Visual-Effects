@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
+             xmlns:fb="http://ns.adobe.com/flashbuilder/2009" minWidth="21" minHeight="21" alpha.disabled="0.5"		 
+			 filters="{[shadow]}">
+    
+    <!-- host component -->
+    <fx:Metadata>
+        <![CDATA[ 
+        /** 
+         * @copy spark.skins.spark.ApplicationSkin#hostComponent
+         */
+        [HostComponent("spark.components.Button")]
+        ]]>
+    </fx:Metadata>
+    
+    <fx:Script>
+        <![CDATA[         
+			import mx.utils.ColorUtil;
+			
+			import spark.filters.DropShadowFilter;
+			
+            static private const exclusions:Array = ["labelDisplay"];
+			
+			[Bindable]
+			private var cornerRadius:Number = 8;
+            
+            /** 
+             * @private
+             */     
+            override public function get colorizeExclusions():Array {return exclusions;}
+            
+            /**
+             * @private
+             */
+            override protected function initializationComplete():void
+            {
+                useChromeColor = true;
+                super.initializationComplete();
+            }  
+            
+            /**
+             *  @private
+             */
+            override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number) : void
+            {
+                var cr:Number = getStyle("cornerRadius");
+                
+				
+                if (cornerRadius != cr)
+                {
+                    cornerRadius = cr;
+				}
+                
+                super.updateDisplayList(unscaledWidth, unscaledHeight);
+            }
+            
+            
+        ]]>        
+    </fx:Script>
+    
+    <!-- states -->
+    <s:states>
+        <s:State name="up" />
+        <s:State name="over" />
+        <s:State name="down" />
+        <s:State name="disabled" />
+    </s:states>
+    
+	<fx:Declarations>
+		<s:DropShadowFilter
+			id="shadow"
+			angle="90"
+			blurX="2"
+			blurY="2"
+			color="0"
+			alpha=".23"
+			distance="2" />
+	</fx:Declarations>
+	
+	<s:Group
+		left="0" right="0" bottom="0" top="0"
+		id="layerMask">
+		<s:Rect			
+			radiusX="{cornerRadius}"
+			radiusY="{cornerRadius}"
+			left="0" right="0" bottom="0" top="0">
+			<s:fill>
+				<s:SolidColor alpha="0" />
+			</s:fill>
+		</s:Rect>
+		
+	</s:Group>	
+	
+
+	
+	<s:Group
+		left="0" right="0" bottom="0" top="0"
+		mask="{layerMask}">
+		
+		<s:Rect
+			left="0" right="0" bottom="0" top="0">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0xc9c9c9"
+									 color.over="{ColorUtil.adjustBrightness(0xc9c9c9, 30)}"/>
+					<s:GradientEntry color="0x727272"
+									 color.over="{ColorUtil.adjustBrightness(0x727272, 30)}"/>
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+		
+		<s:Label id="labelDisplay"
+				 filters="{[new DropShadowFilter(1, -90, 0, .32, 1, 1), new DropShadowFilter(1, -90, 0xFFFFFF, .9, 1, 1, 1, 1, true)]}"
+				 fontSize="29"
+				 fontWeight="bold"
+				 color="0xebebeb"
+				 textAlign="center"
+				 verticalAlign="middle"
+				 maxDisplayedLines="1"
+				 horizontalCenter="0" verticalCenter="1"
+				 left="10" right="10" top="2" bottom="2" />
+		
+		<s:Path
+			left="0" right="0" top="0"
+			alpha=".3"
+			data="M0 0 0 33.4956C12.2534 30.5425 107.097 8.5542 173 18.5771L173 0 0 0Z">
+			<s:fill>
+				<s:SolidColor color="0xFFFFFF" />
+			</s:fill>
+		</s:Path>
+		
+	</s:Group>
+
+	
+</s:SparkSkin>

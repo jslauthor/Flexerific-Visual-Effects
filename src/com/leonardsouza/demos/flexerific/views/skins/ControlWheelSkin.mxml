@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:components="com.leonardsouza.demos.flexerific.views.components.*"
+		width="45"
+		height="45">
+	
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("com.leonardsouza.demos.flexerific.views.components.ControlWheel")]
+	</fx:Metadata>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="disabled" />
+		<s:State name="normal" />
+	</s:states>
+	
+	<s:Button
+		id="thumb"
+		left="0" right="0" top="0" bottom="0"
+		alpha="0" />
+	
+	<s:Button
+		id="track"
+		alpha=".4"
+		skinClass="com.leonardsouza.demos.flexerific.views.skins.ButtonWheelSkin" />
+	
+	<components:Wheel
+		rotation="90"
+		verticalCenter="0"
+		horizontalCenter="0"
+		percentage="{hostComponent.value/hostComponent.maximum}"
+		width="31"
+		height="31"
+		mouseEnabled="false" />
+	
+	<s:Rect
+		width="7"
+		height="3"
+		right="3"
+		verticalCenter="0"
+		visible="{hostComponent.value != hostComponent.maximum}">
+		<s:fill>
+			<s:SolidColor color="0x4dcbf0" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:Label
+		id="labelDisplay"
+		verticalCenter="1"
+		horizontalCenter="0"
+		text="{hostComponent.value}"
+		scaleX="{labelDisplay.width > 30 ? .7 : 1}"
+		scaleY="{labelDisplay.scaleX}"
+		styleName="controlWheelLabel"
+		mouseEnabled="false"/>
+	
+</s:Skin>

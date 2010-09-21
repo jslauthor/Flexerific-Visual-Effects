@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  creationComplete="init()" 
+					  xmlns:components="com.leonardsouza.demos.flexerific.views.components.*"
+					  blendMode="overlay">
+	
+	<fx:Declarations>
+		<s:SolidColorStroke id="curveStroke" color="0xFFFFFF" weight="40" alpha=".3" caps="square" />
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.leonardsouza.easing.spark.Back;
+			import com.leonardsouza.easing.spark.base.EaseInOutBase;
+			import com.leonardsouza.geom.VocalPoint;
+			import com.leonardsouza.util.math.MathUtil;
+			
+			import mx.events.EffectEvent;
+			
+			import org.osmf.events.TimeEvent;
+			
+			import spark.effects.Animate;
+			import spark.effects.animation.Keyframe;
+			import spark.effects.animation.MotionPath;
+			import spark.effects.easing.Linear;
+			
+			private var _playing:Boolean;
+			
+			protected var pts:Vector.<VocalPoint>;
+			protected var animations:Vector.<Animate> = new Vector.<Animate>();
+			protected var timer:Timer;
+			
+			protected var easer:Back;
+			
+			public function get playing():Boolean
+			{
+				return _playing;
+			}
+
+			public function set playing(value:Boolean):void
+			{
+				_playing = value;
+				if (value)
+				{
+					createAnimations();
+					if (timer != null && !timer.running) timer.start();
+				}
+				else
+				{
+					if (timer != null && timer.running) timer.stop();
+					if (animations != null) stopAnimations();
+				}
+			}
+
+			public function prepareCurves():void
+			{
+				pts = new Vector.<VocalPoint>;
+				pts.push(new VocalPoint(0, lineContainer.height/2));
+				pts.push(new VocalPoint(lineContainer.width/2, lineContainer.height/2*.4));
+				pts.push(new VocalPoint(lineContainer.width, lineContainer.height/2));
+				curve1.points = pts;
+				
+				pts = new Vector.<VocalPoint>;
+				pts.push(new VocalPoint(0, lineContainer.height/2));
+				pts.push(new VocalPoint((lineContainer.width/2)*.8, (lineContainer.height/2)/.8));
+				pts.push(new VocalPoint(lineContainer.width, lineContainer.height/2));
+				curve2.points = pts;
+				
+				pts = new Vector.<VocalPoint>;
+				pts.push(new VocalPoint(0, lineContainer.height/2));
+				pts.push(new VocalPoint((lineContainer.width/2)/.3, lineContainer.height/2*.2));
+				pts.push(new VocalPoint(lineContainer.width, lineContainer.height/2));
+				curve3.points = pts;
+				
+				pts = new Vector.<VocalPoint>;
+				pts.push(new VocalPoint(0, lineContainer.height/2));
+				pts.push(new VocalPoint((lineContainer.width/2)*.3, lineContainer.height/2*.2));
+				pts.push(new VocalPoint(lineContainer.width, lineContainer.height/2));
+				curve4.points = pts;
+				
+				pts = new Vector.<VocalPoint>;
+				pts.push(new VocalPoint(0, lineContainer.height/2));
+				pts.push(new VocalPoint((lineContainer.width/2)/.3, lineContainer.height/2*.2));
+				pts.push(new VocalPoint(lineContainer.width, lineContainer.height/2));
+				curve5.points = pts;				
+			}
+			
+			protected function init():void
+			{
+				easer = new Back();
+				easer.easeType = EaseInOutBase.EASE_OUT;
+				
+				prepareCurves();
+				
+				timer = new Timer(3000, 0);
+				timer.addEventListener(TimerEvent.TIMER, createAnimations);
+				createAnimations();
+				if (playing) timer.start();
+			}
+			
+			protected function stopAnimations():void
+			{
+				for (var y:int = 0; y < animations.length; y++)
+				{
+					if (animations[y] != null) Animate(animations[y]).stop();
+					animations[y] = null;
+				}
+			}
+			
+			protected function createAnimations(event:TimerEvent = null):void
+			{
+				stopAnimations();
+				
+				animations = new Vector.<Animate>();
+				var duration:Number = 3000;
+				var mainMPYNum:Number = MathUtil.randomRange((lineContainer.height/2)-90, (lineContainer.height/2)+90);
+				var mainMPXNum:Number = MathUtil.randomRange((lineContainer.width/2)-200, (lineContainer.width/2)+200);
+				var leftMPYNum:Number = MathUtil.randomRange((lineContainer.height/2)-20, (lineContainer.height/2)+20);
+				var rightMPXNum:Number = MathUtil.randomRange((lineContainer.height/2)-20, (lineContainer.height/2)+20);
+				
+				for (var x:int = 0; x < lineContainer.numElements; x++)
+				{
+					var curve:AnimatableCurve = AnimatableCurve(lineContainer.getElementAt(x));
+					
+					var animation:Animate = new Animate(curve.points[1]);
+					animation.easer = new Linear();
+					animation.repeatCount = 1;
+					animation.motionPaths = new Vector.<MotionPath>();
+					
+					var mpY:MotionPath = new MotionPath("y");
+					mpY.keyframes = new Vector.<Keyframe>();
+					mpY.keyframes.push(new Keyframe(0, null));
+					mpY.keyframes.push(new Keyframe(duration, mainMPYNum * MathUtil.randomRange(.5, 1.5)));
+					
+					var mpX:MotionPath = new MotionPath("x");
+					mpX.keyframes = new Vector.<Keyframe>();
+					mpX.keyframes.push(new Keyframe(0, null));
+					mpX.keyframes.push(new Keyframe(duration, mainMPXNum * MathUtil.randomRange(.8, 1.2)));
+					
+					animation.motionPaths.push(mpX);
+					animation.motionPaths.push(mpY);					
+
+					var animationLeft:Animate = new Animate(curve.points[0]);
+					animationLeft.repeatCount = 1;
+					animationLeft.motionPaths = new Vector.<MotionPath>();
+					
+					var leftMPY:MotionPath = new MotionPath("y");
+					leftMPY.keyframes = new Vector.<Keyframe>();
+					leftMPY.keyframes.push(new Keyframe(0, null));
+					leftMPY.keyframes.push(new Keyframe(duration, leftMPYNum * MathUtil.randomRange(.8, 1.2)));
+					animationLeft.motionPaths.push(leftMPY);					
+
+					var animationRight:Animate = new Animate(curve.points[2]);
+					animationRight.repeatCount = 1;
+					animationRight.motionPaths = new Vector.<MotionPath>();
+					
+					var rightMPY:MotionPath = new MotionPath("y");
+					rightMPY.keyframes = new Vector.<Keyframe>();
+					rightMPY.keyframes.push(new Keyframe(0, null));
+					rightMPY.keyframes.push(new Keyframe(duration, rightMPXNum * MathUtil.randomRange(.8, 1.2)));			
+					animationRight.motionPaths.push(rightMPY);					
+					
+					animation.easer = easer;
+					//animationLeft.easer = easer;
+					//animationRight.easer = easer;
+
+					animation.play();					
+					animationLeft.play();
+					animationRight.play();
+					
+					animations.push(animation);
+					animations.push(animationLeft);
+					animations.push(animationRight);
+
+				}					
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Group
+		id="lineContainer"
+		width="100%"
+		height="200"
+		verticalCenter="0">
+		
+		<components:AnimatableCurve id="curve1" stroke="{curveStroke}" />
+		<components:AnimatableCurve id="curve2" stroke="{curveStroke}"/>			
+		<components:AnimatableCurve id="curve3" stroke="{curveStroke}"/>
+		<components:AnimatableCurve id="curve4" stroke="{curveStroke}"/>
+		<components:AnimatableCurve id="curve5" stroke="{curveStroke}"/>
+		
+	</s:Group>
+	
+</s:SkinnableContainer>

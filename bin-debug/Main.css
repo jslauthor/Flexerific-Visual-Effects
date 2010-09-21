@@ -1,4 +1,291 @@
 /* CSS file */
 @namespace s "library://ns.adobe.com/flex/spark";
 @namespace mx "library://ns.adobe.com/flex/mx";
+@namespace components "com.leonardsouza.demos.flexerific.views.components.*";
 
+/* Font Embeds */
+
+@font-face 
+{
+	src: url("assets/fonts/chalet_book.otf");
+	fontFamily: 'Chalet Book';
+	fontStyle: normal;
+	fontWeight: normal;
+	advancedAntiAliasing: true;
+	embed-as-cff: true;
+	unicodeRange: U+0020-002F,U+0030-0039,U+003A-0040,U+0041-005A,U+005B-0060,U+0061-007A,U+007B-007E, /* Basic Latin */
+		U+004B, U+010D, U+20AC, U+00A3, U+007A, U+0142, U+006B, U+0072, U+0024; /*Currencies*/
+	
+}
+
+@font-face 
+{
+	src: url("assets/fonts/chalet_book_bd.otf");
+	fontFamily: 'Chalet Book';
+	fontStyle: normal;
+	fontWeight: bold;
+	advancedAntiAliasing: true;
+	embed-as-cff: true;
+	unicodeRange: U+0020-002F,U+0030-0039,U+003A-0040,U+0041-005A,U+005B-0060,U+0061-007A,U+007B-007E, /* Basic Latin */
+		U+004B, U+010D, U+20AC, U+00A3, U+007A, U+0142, U+006B, U+0072, U+0024; /*Currencies*/
+	
+}
+
+@font-face 
+{
+	src: url("assets/fonts/chalet_tokyo.otf");
+	fontFamily: 'Chalet Tokyo';
+	fontStyle: normal;
+	fontWeight: normal;
+	advancedAntiAliasing: true;
+	embed-as-cff: true;
+	unicodeRange: U+0020-002F,U+0030-0039,U+003A-0040,U+0041-005A,U+005B-0060,U+0061-007A,U+007B-007E, /* Basic Latin */
+		U+004B, U+010D, U+20AC, U+00A3, U+007A, U+0142, U+006B, U+0072, U+0024; /*Currencies*/
+	
+}
+
+@font-face 
+{
+	src: url("assets/fonts/chalet_comprime_cologne_seventy.otf");
+	fontFamily: 'Chalet Seventy';
+	fontStyle: normal;
+	fontWeight: normal;
+	advancedAntiAliasing: true;
+	embed-as-cff: true;
+	unicodeRange: U+0020-002F,U+0030-0039,U+003A-0040,U+0041-005A,U+005B-0060,U+0061-007A,U+007B-007E, /* Basic Latin */
+		U+004B, U+010D, U+20AC, U+00A3, U+007A, U+0142, U+006B, U+0072, U+0024; /*Currencies*/
+	
+}
+
+@font-face 
+{
+	src: url("assets/fonts/chalet_comprime_cologne_sixty.otf");
+	fontFamily: 'Chalet Sixty';
+	fontStyle: normal;
+	fontWeight: normal;
+	advancedAntiAliasing: true;
+	embed-as-cff: true;
+	unicodeRange: U+0020-002F,U+0030-0039,U+003A-0040,U+0041-005A,U+005B-0060,U+0061-007A,U+007B-007E, /* Basic Latin */
+		U+004B, U+010D, U+20AC, U+00A3, U+007A, U+0142, U+006B, U+0072, U+0024; /*Currencies*/
+	
+}
+
+@font-face 
+{
+	src: url("assets/fonts/chalet_comprime_milan_sixty.otf");
+	fontFamily: 'Chalet Milan Sixty';
+	fontStyle: normal;
+	fontWeight: normal;
+	advancedAntiAliasing: true;
+	embed-as-cff: true;
+	unicodeRange: U+0020-002F,U+0030-0039,U+003A-0040,U+0041-005A,U+005B-0060,U+0061-007A,U+007B-007E, /* Basic Latin */
+		U+004B, U+010D, U+20AC, U+00A3, U+007A, U+0142, U+006B, U+0072, U+0024; /*Currencies*/
+	
+}
+
+@font-face 
+{
+	src: url("assets/fonts/chalet_new_york_nineteen_eighty.otf");
+	fontFamily: 'Chalet NY1980';
+	fontStyle: normal;
+	fontWeight: normal;
+	advancedAntiAliasing: true;
+	embed-as-cff: true;
+	unicodeRange: U+0020-002F,U+0030-0039,U+003A-0040,U+0041-005A,U+005B-0060,U+0061-007A,U+007B-007E, /* Basic Latin */
+		U+004B, U+010D, U+20AC, U+00A3, U+007A, U+0142, U+006B, U+0072, U+0024; /*Currencies*/
+	
+}
+
+@font-face 
+{
+	src: url("assets/fonts/chalet_london_nineteen_eighty.otf");
+	fontFamily: 'Chalet London1980';
+	fontStyle: normal;
+	fontWeight: normal;
+	advancedAntiAliasing: true;
+	embed-as-cff: true;
+	unicodeRange: U+0020-002F,U+0030-0039,U+003A-0040,U+0041-005A,U+005B-0060,U+0061-007A,U+007B-007E, /* Basic Latin */
+		U+004B, U+010D, U+20AC, U+00A3, U+007A, U+0142, U+006B, U+0072, U+0024; /*Currencies*/
+	
+}
+
+/* Skin Assignments */
+
+components|ControlWheel
+{
+	skin-class: ClassReference("com.leonardsouza.demos.flexerific.views.skins.ControlWheelSkin");
+}
+
+s|Button
+{
+	skin-class: ClassReference("com.leonardsouza.demos.flexerific.views.skins.ButtonSkin");
+}
+
+s|TextInput
+{
+	skin-class: ClassReference("com.leonardsouza.demos.flexerific.views.skins.TextInputSkin");
+}
+
+components|ControlBars s|Button
+{
+	skin-class: ClassReference("com.leonardsouza.demos.flexerific.views.skins.LaunchButtonSkin");
+}
+
+/* Text Styles */
+
+.dominationTitleLabel
+{
+	fontFamily: 'Chalet Sixty';
+	color: #E30101;
+	font-size: 150;	
+}
+
+.leonardLabel
+{
+	fontFamily: 'Chalet NY1980';
+	color: #FFFFFF;
+	font-size: 30;	
+}
+
+.leonardPresentsLabel
+{
+	fontFamily: 'Chalet NY1980';
+	color: #FFFFFF;
+	font-size: 20;
+}
+
+.associationLabel
+{
+	fontFamily: 'Chalet NY1980';
+	color: #FFFFFF;
+	font-size: 10;
+}	
+
+.dominationLabel
+{
+	fontFamily: 'Chalet NY1980';
+	color: #a6eefd;
+	font-size: 11;
+}
+
+.worldDominationLabel
+{
+	fontFamily: 'Chalet Sixty';
+	color: #FFFFFF;
+	font-size: 40;
+}
+
+components|Digit s|Label
+{
+	fontFamily: 'Chalet Seventy';
+	font-size: 58;
+}
+
+.timeOfDayLabel
+{
+	fontFamily: 'Chalet London1980';
+	color: #0080b5;
+	font-size: 10;
+}
+
+.dateLabel
+{
+	fontFamily: 'Chalet Book';
+	fontStyle: normal;
+	fontWeight: normal;
+	color: #0068A8;
+	font-size: 12;
+}
+
+s|Button #labelDisplay
+{
+	fontFamily: 'Chalet Sixty';
+	color: #b0e9ff;
+	font-size: 31;
+}
+
+.securityLabel
+{
+	fontFamily: 'Chalet Sixty';
+	color: #1c6e8d;
+	font-size: 29;	
+	tracking-right: -.5;
+}
+
+.securityInfo
+{
+	fontFamily: 'Chalet Milan Sixty';
+	color: #1c6e8d;
+	font-size: 24;	
+}
+
+.securityPercent
+{
+	fontFamily: 'Chalet Seventy';
+	color: #1c6e8d;
+	font-size: 60;	
+}
+
+.securityPercentSign
+{
+	fontFamily: 'Chalet Seventy';
+	color: #1c6e8d;
+	font-size: 30;	
+}
+
+.securityInput
+{
+	fontFamily: 'Chalet NY1980';
+	color: #0080a0;
+	font-size: 12;	
+}
+
+.securityInputLabel
+{
+	fontFamily: 'Chalet NY1980';
+	color: #0080a0;
+	font-size: 18;
+}
+
+.bootingLabel
+{
+	fontFamily: 'Chalet Book';
+	fontStyle: normal;
+	fontWeight: normal;
+	font-size: 31;
+	color: #71898f;	
+}
+
+.controlWheelLabel
+{
+	fontFamily: 'Chalet Tokyo';
+	fontStyle: normal;
+	fontWeight: normal;
+	font-size: 18;
+	color: #FFFFFF;
+}
+
+.systemOutLabel
+{
+	fontFamily: 'Chalet Sixty';
+	fontStyle: normal;
+	fontWeight: normal;
+	font-size: 30;
+	color: #a4bac0;
+}
+
+.consoleText
+{
+	fontFamily: 'Chalet Book';
+	fontStyle: normal;
+	fontWeight: bold;
+	font-size: 11;
+	color: #a4bac0;
+}
+
+components|ControlBars s|Button #labelDisplay
+{
+	fontFamily: 'Chalet NY1980';
+	color: #ffe8e8;
+	font-size: 30;
+}

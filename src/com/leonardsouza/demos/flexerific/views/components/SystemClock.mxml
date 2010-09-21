@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:components="com.leonardsouza.demos.flexerific.views.components.*"
+		 creationComplete="init()">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.formatters.DateFormatter;
+			
+			import spark.filters.BevelFilter;
+
+			protected function init():void
+			{
+				var timer:Timer = new Timer(5000, 0);
+				timer.addEventListener(TimerEvent.TIMER, setTime);
+				setTime();
+				timer.start();
+			}
+			
+			protected function setTime(event:TimerEvent = null):void
+			{
+				var df:DateFormatter = new DateFormatter();
+				var d:Date = new Date();
+				
+				df.formatString = 'L';
+				hours.label = df.format(d).length < 2 ? "0" + df.format(d) : df.format(d);
+				
+				df.formatString = 'NN';
+				minutes.label = df.format(d);
+				
+				timeOfDay.text = d.getHours() >= 12 ? 'pm' : 'am';
+				df.formatString = 'EEE, MMM DD';
+				dateLabel.text = df.format(d);
+			}
+
+		]]>
+	</fx:Script>
+	
+	<s:HGroup 
+		filters="{[new BevelFilter(1, 90, 0xFFFFFF, .7, 0, 0, 1, 1)]}"
+		gap="5">
+		<components:Digit id="hours" />
+		<components:Digit id="minutes" />
+	</s:HGroup>
+	
+	<s:Group bottom="7" left="-18">
+		
+		<s:Rect left="0" right="0" top="0" bottom="0">
+			<s:fill>
+				<s:SolidColor color="0x91e9ff" />
+			</s:fill>
+		</s:Rect>
+		
+		<s:Label 
+			styleName="timeOfDayLabel"
+			id="timeOfDay"
+			text="am" 
+			top="2" right="3" bottom="2" left="3" />
+		
+	</s:Group>
+	
+	<s:Label
+		id="dateLabel"
+		styleName="dateLabel"
+		text="Thur. Jan 16"
+		bottom="-20"
+		right="0" />
+	
+</s:Group>

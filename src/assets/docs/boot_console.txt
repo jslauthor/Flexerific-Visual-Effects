@@ -1,0 +1,60 @@
+
+
+
+
+
+
+
+## MOTD ##
+
+Use of the World Domination computer is prohibited only to those worthy
+of deciding the fate of the world. If you are one of those individuals
+please login as aldious/endoftheworld. Otherwise go snooping around
+some other network, you are not welcome here.
+
+Enjoy your visit.
+
+-Illuminati
+
+## EOM ##
+
+
+>> System startup initiated
+>> Loading root privileges
+>> Loading IP Tables
+
+--- 10.34.54.112 | Latency 0ms | ICMP available
+--- 10.65.43.110 | Latency 0ms | ICMP available
+--- 12.34.56.789 | Latency 3ms | ICMP available - packet integrity 4%
+--- 66.666.666.6 | Latency 0ms | ICMP available
+
+>> Mounting disk drives
+
+--- HD01 Mounted successfully!
+--- HD02 Mounted successfully!
+--- HD03 Mounted successfully!
+--- HD04 Mounted successfully!
+--- HD05 Mounted successfully!
+--- HD06 Mounted successfully!
+--- HD07 Mounted successfully!
+--- HD08 Mounted successfully!
+
+| Raid 10 configured, disk fragmentation at .08% |
+| +++++++++++                                    |
+
+Loading USB
+Device01 > VOID
+Device02 > FSK
+Device03 > END
+Device04 > BIN
+Finished loading devices!
+
+>> Executing domination script 
+>> Analyzing target...
+>> Calculating trajectories...
+>> Initializing matrices...
+>> Strategizing world domination...
+>> Harming puppies...
+>> Readying Cthulu... complete
+
+>> SYSTEM READY - Enjoy your day

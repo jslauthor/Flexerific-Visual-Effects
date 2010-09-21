@@ -1,0 +1,64 @@
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha.disabledGroup="0.5" >
+	
+     <fx:Metadata>[HostComponent("spark.components.WindowedApplication")]</fx:Metadata>
+
+    <s:states>
+        <s:State name="normal" />
+        <s:State name="disabled" stateGroups="disabledGroup" />
+        <s:State name="normalAndInactive" stateGroups="inactiveGroup" />
+        <s:State name="disabledAndInactive" stateGroups="disabledGroup, inactiveGroup" />
+    </s:states>
+
+    <!-- layer 1: background fill -->
+    <!--- Defines the background color of the skin. -->
+    <s:Rect id="backgroundRect" left="0" right="0" top="0" bottom="0" >
+        <s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0xefefef" ratio=".1" />
+				<s:GradientEntry color="0xbebebe" ratio=".64" />
+				<s:GradientEntry color="0x949494" ratio=".68" />
+				<s:GradientEntry color="0xd9d9d9" ratio=".95" />
+			</s:LinearGradient>
+        </s:fill>
+    </s:Rect>
+
+    <!-- layer 2: content + status bar -->
+    <s:Group left="0" right="0" top="0" bottom="0" minHeight="24" minWidth="0" >
+		
+        <s:layout>
+            <s:VerticalLayout gap="0"/>
+        </s:layout>
+    
+        <!-- content -->
+        <!--- @copy spark.components.SkinnableContainer#contentGroup -->
+        <s:Group id="contentGroup" width="100%" height="100%" minHeight="0" minWidth="0"/>
+
+        <s:Group id="statusBar" width="100%" minHeight="24" >
+        
+            <s:Rect left="0" right="0" top="0" bottom="0">
+               <s:fill>
+                    <s:LinearGradient rotation="90">
+                        <s:GradientEntry color="0xE2E2E2" />
+                        <s:GradientEntry color="0xD9D9D9" />
+                    </s:LinearGradient>
+               </s:fill>
+            </s:Rect>
+            
+            <s:Rect left="1" right="1" top="1" bottom="0" >
+               <s:stroke>
+                    <s:LinearGradientStroke rotation="90" weight="1">
+                        <s:GradientEntry color="0xEAEAEA" />
+                        <s:GradientEntry color="0xBEBEBE" />
+                    </s:LinearGradientStroke>
+               </s:stroke>
+            </s:Rect>
+        
+            <s:Label id="statusText" top="2" bottom="2" left="10" right="10" verticalAlign="middle" 
+                fontSize="10" color="0x585858" width="100%" maxDisplayedLines="1" />
+
+        </s:Group> 
+		
+    </s:Group>
+
+</s:SparkSkin>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Path xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		data="M52.6836 36.3242 63.2788 26.8076 70.1753 35.8359 85.8926 35.8359 72.0693 20.0645 97.0547 0 80.8584 0 66.2314 13.1465 62.0913 7.72461 18.3403 7.72461 0 52.0986 13.542 52.0986 19.2861 36.3242 52.6836 36.3242ZM40.332 35.8516 44.0381 25.9424 23.0615 25.9424 25.9155 18.1025 46.1968 18.1025 49.8589 8.12695 57.8594 19.7959 40.332 35.8516Z">
+	
+	<fx:Declarations>
+		<fx:int id="color">0xFFFFFF</fx:int>
+	</fx:Declarations>
+	
+	<s:fill>
+		<s:SolidColor color="{color}"/>
+	</s:fill>
+	
+</s:Path>

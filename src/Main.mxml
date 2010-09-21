@@ -32,20 +32,386 @@
 	
 	www.leonardsouza.com | hey@leonardsouza.com
 	
-	:: enjoy it up. feel free to reach out. ::
+	:: enjoy it up and feel free to reach out. ::
 
 -->
 
-<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   minWidth="1024" minHeight="768"
+			   xmlns:contexts="com.leonardsouza.demos.flexerific.contexts.*"
+			   xmlns:components="com.leonardsouza.demos.flexerific.views.components.*"
+			   xmlns:ease="com.leonardsouza.easing.spark.*" 
+			   xmlns:filters="com.leonardsouza.filters.*" 
+			   xmlns:interpolators="com.leonardsouza.interpolators.*" 
+			   xmlns:sound="com.leonardsouza.sound.*" 
+			   xmlns:effects="com.leonardsouza.effects.*"
+			   showStatusBar="false" 
+			   backgroundColor="0"
+			   frameRate="120"
+			   creationPolicy="all"
+			   currentState="loading">
 	
 	<fx:Style source="Main.css" />
 	
+	<fx:Script>
+		<![CDATA[
+			import com.leonardsouza.components.Range;
+			import com.leonardsouza.display.RGBA;
+			import com.leonardsouza.easing.spark.base.EaseInOutBase;
+			import com.leonardsouza.interpolators.RGBAInterpolator;
+			import com.leonardsouza.interpolators.RangeInterpolator;
+			
+			import spark.filters.BlurFilter;
+			import spark.filters.GlowFilter;
+			import spark.filters.ShaderFilter;
+						
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				var pp:PerspectiveProjection = new PerspectiveProjection();
+				pp.projectionCenter = new Point(width/2, height/2);
+				transform.perspectiveProjection = pp;	
+			}
+			
+		]]>
+	</fx:Script>
+	
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:BlurFilter id="blurFilter" />
+		<contexts:FlexerificContext id="context" contextView="{this}"/>
+		<ease:Back id="backEase" easeType="{EaseInOutBase.EASE_IN_OUT}" strength=".4" />
+		<ease:Quadratic id="quadraticEase" easeType="{EaseInOutBase.EASE_IN}" />
+		<filters:RGBSineDistortion id="rgbSineDistortionFilter" leftExtension="50" rightExtension="50"/>
+		<filters:DampedSinFilter id="dampedSineFilter" />
+		<interpolators:PointInterpolator id="pointInterpolator" />
+		<interpolators:RGBAInterpolator id="rgbaInterpolator" />
+		<sound:AudioChannel
+			id="backgroundMusic" 
+			source="@Embed('/assets/audio/Alone.mp3')"
+			volume=".15"/>
+		<sound:AudioChannel
+			id="leonardSound" 
+			source="@Embed('/assets/audio/electronic_whoosh.mp3')"
+			volume=".5"/>
+		<sound:AudioChannel
+			id="dominationSound" 
+			source="@Embed('/assets/audio/bell_reverse_low2.mp3')"
+			volume=".5"/>
+		<sound:AudioChannel
+			id="tvNoise"
+			source="@Embed('/assets/audio/tv_noise.mp3')"
+			volume=".35"/>
+		<sound:AudioChannel
+			id="darkHitSound"
+			source="@Embed('/assets/audio/dark_hit.mp3')"
+			volume=".25"/>
+		<sound:AudioChannel
+			id="computerBackgroundSound"
+			source="@Embed('/assets/audio/throb2.mp3')"
+			volume="1"
+			repeatForever="true"/>
+		<sound:AudioChannel
+			id="shutdownSound"
+			source="@Embed('/assets/audio/power_down.mp3')"
+			volume=".5"/>
 	</fx:Declarations>
 	
+	<s:states>
+		<s:State name="loading" />
+		<s:State name="credits" />
+		<s:State name="lit" />
+		<s:State name="shutdown" />
+	</s:states>
 	
+	<s:transitions>
+		
+		<s:Transition fromState="loading" toState="credits">
+			<s:Sequence id="loadingToCreditsTransition">
+				
+				<s:CallAction target="{backgroundMusic}" functionName="play" />
+				
+				<s:AddAction target="{leonardLabel}" startDelay="100" />
+				<s:SetAction target="{leonardLabel}" property="alpha" value="0" />
+				<s:SetAction target="{leonardLabel}" property="x" value="{credits.width / 2 - leonardLabel.width / 2}" />
+				<s:SetAction target="{leonardLabel}" property="y" value="{credits.height / 2 - leonardLabel.height / 2}" />
+				<s:Parallel target="{leonardLabel}">
+					<s:AnimateFilter bitmapFilter="{blurFilter}" duration="1000">
+						<s:SimpleMotionPath property="blurX" valueFrom="40" valueTo="0" />
+						<s:SimpleMotionPath property="blurY" valueFrom="40" valueTo="0" />
+					</s:AnimateFilter>
+					<s:Fade alphaFrom="0" alphaTo="1" duration="1000" />					
+				</s:Parallel>
+				<s:CallAction target="{leonardSound}" functionName="play" startDelay="300" />
+				<s:Parallel target="{leonardLabel}">
+					<effects:Shake3D target="{leonardLabel}" startDelay="600" interpolator="{new RangeInterpolator()}" duration="3200">
+						<s:SimpleMotionPath property="xRange" valueFrom="{new Range(credits.width/2 - leonardLabel.width/2, credits.width/2 - leonardLabel.width/2)}" valueTo="{new Range((credits.width/2 - leonardLabel.width/2) - 10, (credits.width/2 - leonardLabel.width/2) + 10)}" />
+						<s:SimpleMotionPath property="yRange" valueFrom="{new Range(credits.height/2 - leonardLabel.height/2, credits.height/2 - leonardLabel.height/2)}" valueTo="{new Range((credits.height/2 - leonardLabel.height/2) - 10, (credits.height/2 - leonardLabel.height/2) + 10)}" />
+					</effects:Shake3D>
+					<s:AnimateFilter bitmapFilter="{blurFilter}" duration="700" startDelay="2000">
+						<s:SimpleMotionPath property="blurX" valueFrom="0" valueTo="40" />
+						<s:SimpleMotionPath property="blurY" valueFrom="0" valueTo="40" />
+					</s:AnimateFilter>
+					<s:Fade alphaFrom="1" alphaTo="0" duration="250" startDelay="2500"/>			
+				</s:Parallel>
+				
+				<s:AddAction target="{effectiveUILogo}" startDelay="1000" />
+				<s:SetAction target="{effectiveUILogo}" property="alpha" value="0" />
+				<s:Parallel target="{effectiveUILogo}">
+					<s:AnimateFilter bitmapFilter="{blurFilter}" duration="1000">
+						<s:SimpleMotionPath property="blurX" valueFrom="40" valueTo="0" />
+						<s:SimpleMotionPath property="blurY" valueFrom="40" valueTo="0" />
+					</s:AnimateFilter>
+					<s:Fade alphaFrom="0" alphaTo="1" duration="1000" />					
+				</s:Parallel>
+				<s:SetAction target="{dampedSineFilter}" property="position" value="{new Point(effectiveUILogo.width/2, effectiveUILogo.height/2)}" />
+				<s:SetAction target="{dampedSineFilter}" property="amount" value="1500" />
+				<s:SetAction target="{dampedSineFilter}" property="wavelength" value="176" />
+				<s:SetAction target="{dampedSineFilter}" property="overlay" value="7" />
+				<s:Parallel target="{effectiveUILogo}" startDelay="1000">
+					<s:CallAction target="{darkHitSound}" functionName="play" />
+					<s:AnimateFilter bitmapFilter="{dampedSineFilter}" duration="2000" easer="{quadraticEase}">
+						<s:SimpleMotionPath property="time" valueFrom="0" valueTo="140" />
+					</s:AnimateFilter>
+					<s:Parallel startDelay="1700">
+						<s:AnimateFilter bitmapFilter="{blurFilter}" duration="3000">
+							<s:SimpleMotionPath property="blurX" valueFrom="0" valueTo="40" />
+							<s:SimpleMotionPath property="blurY" valueFrom="0" valueTo="40" />
+						</s:AnimateFilter>
+						<s:Fade alphaFrom="1" alphaTo="0" duration="250"/>							
+					</s:Parallel>
+				</s:Parallel>
+				
+				<s:AddAction target="{dominationLabel}" startDelay="500"/>
+				<s:SetAction target="{dominationLabel}" property="alpha" value="0" />
+				<s:CallAction target="{dominationSound}" functionName="play" />
+				<s:Fade target="{dominationLabel}" alphaFrom="0" alphaTo="1" duration="3000"  />
+				<s:Parallel target="{dominationLabel}" startDelay="1000">
+					<s:CallAction target="{tvNoise}" functionName="play" startDelay="150" />
+					<s:CallAction target="{tvNoise}" functionName="play" startDelay="1150" />
+					<s:AnimateFilter bitmapFilter="{rgbSineDistortionFilter}" interpolator="{rgbaInterpolator}">
+						<s:MotionPath property="intensityRGB">
+							<s:Keyframe time="0" value="{new RGBA(0, 0, 0)}"/>
+							<s:Keyframe time="100" value="{new RGBA(-4, -3, 2)}" />
+							<s:Keyframe time="200" value="{new RGBA(0, 0, 0)}"/>
+							<s:Keyframe time="1000" value="{new RGBA(0, 0, 0)}"/>
+							<s:Keyframe time="1100" value="{new RGBA(-8, -6, 4)}"/>						
+						</s:MotionPath>
+						<s:MotionPath property="directionRGB">
+							<s:Keyframe time="0" value="{new RGBA(0, 0, 0)}"/>
+							<s:Keyframe time="100" value="{new RGBA(-1, 1, -1)}"/>
+							<s:Keyframe time="200" value="{new RGBA(0, 0, 0)}"/>
+							<s:Keyframe time="1000" value="{new RGBA(0, 0, 0)}"/>
+							<s:Keyframe time="1100" value="{new RGBA(-1, 1, -1)}"/>						
+						</s:MotionPath>
+						<s:MotionPath property="frequencyRGB">
+							<s:Keyframe time="0" value="{new RGBA(0, 0, 0)}"/>
+							<s:Keyframe time="100" value="{new RGBA(.28, .28, .28)}"/>
+							<s:Keyframe time="200" value="{new RGBA(0, 0, 0)}"/>
+							<s:Keyframe time="1000" value="{new RGBA(0, 0, 0)}"/>
+							<s:Keyframe time="1100" value="{new RGBA(.28, .28, .28)}"/>
+						</s:MotionPath>
+					</s:AnimateFilter>
+					<s:Parallel startDelay="2000">
+						<s:AnimateFilter bitmapFilter="{blurFilter}" duration="3000">
+							<s:SimpleMotionPath property="blurX" valueFrom="0" valueTo="40" />
+							<s:SimpleMotionPath property="blurY" valueFrom="0" valueTo="40" />
+						</s:AnimateFilter>
+						<s:Fade alphaFrom="1" alphaTo="0" duration="3000" />
+					</s:Parallel>
+				</s:Parallel>
+				
+				<s:SetAction target="{computerBackgroundSound}" property="volume" value="0" />
+				<s:Parallel>
+					<s:CallAction target="{computerBackgroundSound}" functionName="play" />
+					<s:Animate target="{computerBackgroundSound}" duration="2000">
+						<s:SimpleMotionPath property="volume" valueFrom="0" valueTo=".7" />
+					</s:Animate>	
+					<s:Animate target="{backgroundMusic}" effectEnd="{backgroundMusic.stop()}" duration="2000">
+						<s:SimpleMotionPath property="volume" valueTo="0" />
+					</s:Animate>	
+				</s:Parallel>
+			</s:Sequence>
+		</s:Transition>
+		
+		<s:Transition fromState="credits" toState="lit">
+			<s:Parallel startDelay="1000">
+				<s:Parallel startDelay="300">
+					<s:Animate target="{mainContent}" easer="{backEase}">
+						<s:MotionPath property="scaleX">
+							<s:Keyframe time="0" />
+							<s:Keyframe time="4000" />
+						</s:MotionPath>
+						<s:MotionPath property="scaleY">
+							<s:Keyframe time="0" />
+							<s:Keyframe time="4000" />
+						</s:MotionPath>
+					</s:Animate>
+					<s:Animate targets="{[horizon1, horizon2]}" easer="{backEase}">
+						<s:MotionPath property="ratio">
+							<s:Keyframe time="0" />
+							<s:Keyframe time="4000" />
+						</s:MotionPath>
+					</s:Animate>
+					<s:Animate target="{computerGroup}" easer="{backEase}">
+						<s:MotionPath property="gap">
+							<s:Keyframe time="0" />
+							<s:Keyframe time="4000" />
+						</s:MotionPath>
+					</s:Animate>					
+				</s:Parallel>
+				<s:Animate target="{overlay}">
+					<s:MotionPath property="alpha">
+						<s:Keyframe time="25" value=".2"  />
+						<s:Keyframe time="50" value=".1" />
+						<s:Keyframe time="100" value=".5" />
+						<s:Keyframe time="150" value=".2" />
+						<s:Keyframe time="200" value=".6" />
+						<s:Keyframe time="250" value=".4" />
+						<s:Keyframe time="350" value=".6" />
+						<s:Keyframe time="400" value=".4" />
+						<s:Keyframe time="450" value=".6" />
+						<s:Keyframe time="2000" />
+					</s:MotionPath>
+				</s:Animate>
+			</s:Parallel>
+		</s:Transition>
+		
+		<s:Transition fromState="*" toState="shutdown">
+			<s:Parallel>
+				<s:CallAction target="{shutdownSound}" functionName="play" />
+				<s:CallAction target="{computerBackgroundSound}" functionName="stop" />
+			</s:Parallel>
+		</s:Transition>
+		
+	</s:transitions>
+
+	<!-- Background -->
 	
-</s:Application>
+	<s:Rect id="background" 
+			left="0" right="0" top="0" bottom="0" >
+		<s:fill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry 
+					color="0xefefef" 
+					ratio=".1" />
+				<s:GradientEntry 
+					id="horizon1"
+					color="0xbebebe" 
+					ratio.credits=".49"
+					ratio.lit=".64" />
+				<s:GradientEntry 
+					color="0x949494" 
+					id="horizon2"
+					ratio.credits=".50"
+					ratio.lit=".68" />
+				<s:GradientEntry 
+					color="0xd9d9d9" 
+					ratio=".95" />
+			</s:LinearGradient>
+		</s:fill>
+	</s:Rect>
+
+	<!-- Main Content -->
+	
+	<s:Group 
+		id="mainContent"
+		left="0" right="0" bottom="0" top="0"
+		scaleX.credits=".4"
+		scaleY.credits=".4"
+		scaleX.lit="1"
+		scaleY.lit="1">
+		
+		<s:VGroup
+			id="computerGroup"
+			horizontalCenter="0"
+			verticalCenter="10"
+			gap.credits="100"
+			gap.lit="30"
+			horizontalAlign="center">
+
+			<components:EffectsComputer
+				id="computer"
+				cacheAsBitmap="true"/>
+
+			<s:Rect
+				id="computerShadow"
+				radiusX="15" radiusY="15"
+				width="{(computer.width * .93) * computer.scaleX}"
+				height="50"
+				alpha=".2" 
+				rotationX="-100"
+				filters="{[new BlurFilter(30, 30)]}">
+				<s:fill>
+					<s:SolidColor color="0" />
+				</s:fill>
+			</s:Rect>
+			
+		</s:VGroup>
+		
+	</s:Group>
+
+	<!-- Darkened Overlay -->
+
+	<s:Rect id="overlay" 
+			left="0" right="0" top="0" bottom="0" 
+			alpha.shutdown=".8"
+			alpha.credits=".8"
+			alpha.lit="0"
+			blendMode="darken">
+		<s:fill>
+			<s:SolidColor alpha="1" />
+		</s:fill>
+	</s:Rect>
+	
+	<!-- Opening Credits -->
+	
+	<s:Group
+		id="credits"
+		left="0" right="0" bottom="0" top="0"
+		includeIn="credits"
+		filters="{[new BlurFilter(2, 2)]}">
+		
+		<s:Label
+			id="dominationLabel"
+			styleName="dominationTitleLabel"
+			textAlign="center"
+			width="100%"
+			verticalCenter="0"
+			horizontalCenter="0"
+			alpha.credits="0"
+			text="DOMINATION" />
+
+		<s:VGroup
+			id="effectiveUILogo"
+			verticalCenter="0"
+			horizontalCenter="0"
+			alpha.credits="0"
+			gap="-3">
+			<s:Label
+				styleName="associationLabel"
+				text="in association with"
+				paddingRight="18"/>
+			<s:Image source="@Embed('/assets/images/effectiveui_logo.png')" />			
+		</s:VGroup>
+
+		<s:VGroup
+			id="leonardLabel"
+			alpha.credits="0"
+			x.credits="{credits.width / 2 - leonardLabel.width / 2}"
+			y.credits="{credits.height / 2 - leonardLabel.height / 2}"
+			horizontalAlign="center"
+			gap="-3">
+			<s:Label
+				styleName="leonardLabel"
+				text="leonard souza" />	
+			<s:Label
+				styleName="leonardPresentsLabel"
+				text="presents"/>
+		</s:VGroup>
+		
+	</s:Group>
+	
+</s:WindowedApplication>
